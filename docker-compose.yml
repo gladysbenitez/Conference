@@ -1,0 +1,26 @@
+version: "3.7"
+services:
+  conference-go-api:
+    build:
+      context: ./api
+      dockerfile: ./Dockerfile.dev
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./api:/app
+    environment:
+      PEXELS_API_KEY: ${PEXELS_API_KEY}
+      MONGO_DB_CONNECTION_STRING: ${MONGO_DB_CONNECTION_STRING}
+      MONGO_DB_NAME: ${MONGO_DB_NAME}
+      SESSION_SECRET_KEY: ${SESSION_SECRET_KEY}
+  react:
+    image: node:lts-bullseye
+    command: npm run dev
+    working_dir: /app
+    volumes:
+      - ./ghi/app:/app
+    environment:
+      - HOST=0.0.0.0
+      - PORT=3001
+    ports:
+      - "3001:3001"
